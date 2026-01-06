@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\AnimalCategory;
+use App\Http\Requests\AnimalCategory\StoreAnimalCategoryRequest;
+use App\Http\Requests\AnimalCategory\UpdateAnimalCategoryRequest;
 
 class AnimalCategoryController extends Controller
 {
@@ -13,54 +16,44 @@ class AnimalCategoryController extends Controller
     public function index()
     {
         return response()->json([
-            'message' => 'index'
+            'message' => 'index',
+            'data' => AnimalCategory::all(),
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreAnimalCategoryRequest $request)
     {
-        return response()->json([
-            'message' => 'store',
-            'data' => $request->all()
-        ]);
+        $category = AnimalCategory::create($request->validated());
+
+        return response()->json($category);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(AnimalCategory $animal_category)
     {
-        return response()->json([
-            'message' => 'show',
-            'data' => $id
-        ]);
+        return response()->json($animal_category);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateAnimalCategoryRequest $request, AnimalCategory $animal_category)
     {
-        return response()->json([
-            'message' => 'update',
-            'data' => [
-                'request_data' => $request->all(),
-                'id' => $id,
-            ],
-        ]);
+        $category = $animal_category->update($request->validated());
+
+        return response()->json($category);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(AnimalCategory $animal_category)
     {
-        return response()->json([
-            'message' => 'destroy',
-            'id' => $id,
-        ]);
+        return response()->noContent();
     }
 }
