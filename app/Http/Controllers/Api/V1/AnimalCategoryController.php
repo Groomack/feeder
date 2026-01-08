@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\AnimalCategory;
 use App\Http\Requests\AnimalCategory\StoreAnimalCategoryRequest;
 use App\Http\Requests\AnimalCategory\UpdateAnimalCategoryRequest;
+use App\Http\Resources\AnimalCategoryResource;
 
 class AnimalCategoryController extends Controller
 {
@@ -15,10 +16,7 @@ class AnimalCategoryController extends Controller
      */
     public function index()
     {
-        return response()->json([
-            'message' => 'index',
-            'data' => AnimalCategory::all(),
-        ]);
+        return AnimalCategoryResource::collection(AnimalCategory::all());
     }
 
     /**
@@ -26,9 +24,10 @@ class AnimalCategoryController extends Controller
      */
     public function store(StoreAnimalCategoryRequest $request)
     {
-        $category = AnimalCategory::create($request->validated());
+        $data = $request->validated();
+        $category = AnimalCategory::create($data);
 
-        return response()->json($category);
+        return new AnimalCategoryResource($category);
     }
 
     /**
@@ -36,7 +35,7 @@ class AnimalCategoryController extends Controller
      */
     public function show(AnimalCategory $animal_category)
     {
-        return response()->json($animal_category);
+        return new AnimalCategoryResource($animal_category);
     }
 
     /**
@@ -44,9 +43,10 @@ class AnimalCategoryController extends Controller
      */
     public function update(UpdateAnimalCategoryRequest $request, AnimalCategory $animal_category)
     {
-        $category = $animal_category->update($request->validated());
+        $data = $request->validated();
+        $animal_category->update($data);
 
-        return response()->json($category);
+        return new AnimalCategoryResource($animal_category);
     }
 
     /**
@@ -54,6 +54,8 @@ class AnimalCategoryController extends Controller
      */
     public function destroy(AnimalCategory $animal_category)
     {
+        $animal_category->delete();
+
         return response()->noContent();
     }
 }
