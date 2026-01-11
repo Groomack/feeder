@@ -9,7 +9,7 @@ use App\Http\Requests\AnimalCategory\StoreAnimalCategoryRequest;
 use App\Http\Requests\AnimalCategory\UpdateAnimalCategoryRequest;
 use App\Http\Resources\AnimalCategoryResource;
 
-class AnimalCategoryController extends Controller
+class AnimalCategoriesController extends Controller
 {
     /**
      * Display a listing of the resource.
