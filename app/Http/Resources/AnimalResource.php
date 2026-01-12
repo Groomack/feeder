@@ -4,8 +4,10 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\UserResource;
+use App\Http\Resources\AnimalCategoryResource;
 
-class AnimalCategoryResource extends JsonResource
+class AnimalResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,7 +18,10 @@ class AnimalCategoryResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
+            'name' => $this->name,
+            'user' => new UserResource($this->user),
+            'category' => new AnimalCategoryResource($this->category),
+            'img_path' => $this->img_path
         ];
     }
 }
