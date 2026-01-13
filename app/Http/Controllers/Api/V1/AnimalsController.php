@@ -16,7 +16,11 @@ class AnimalsController extends Controller
      */
     public function index()
     {
-        return AnimalResource::collection(Animal::with(['user', 'category'])->get());
+        $user = request()->user();
+
+        $animals = $user->animals; 
+
+        return AnimalResource::collection($animals);
     }
 
     /**
@@ -26,7 +30,7 @@ class AnimalsController extends Controller
     {
         $data = $request->validated();
 
-        $data['user_id'] = 2;
+        $data['user_id'] = $request->user()->id;
 
         $animal = Animal::create($data);
 
@@ -38,6 +42,8 @@ class AnimalsController extends Controller
      */
     public function show(Animal $animal)
     {
+        abort_if(request()->user()->id != $animal->user_id, 403, 'Forbidden');
+    
         return new AnimalResource($animal);
     }
 
@@ -46,6 +52,8 @@ class AnimalsController extends Controller
      */
     public function update(UpdateAnimalRequest $request, Animal $animal)
     {
+        abort_if($request->user()->id != $animal->user_id, 403, 'Forbidden');
+
         $data = $request->validated();
         
         $animal->update($data);
@@ -58,6 +66,8 @@ class AnimalsController extends Controller
      */
     public function destroy(Animal $animal)
     {
+        abort_if(request()->user()->id != $animal->user_id, 403, 'Forbidden');
+    
         $animal->delete();
 
         return response()->noContent();

@@ -10,8 +10,10 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::prefix('V1')->group(function() {
-    Route::apiResource('animal-categories', AnimalCategoriesController::class);
-    Route::apiResource('animals', AnimalsController::class);
+    Route::middleware('auth:sanctum')->group(function() {
+        Route::apiResource('animal-categories', AnimalCategoriesController::class);
+        Route::apiResource('animals', AnimalsController::class);    
+    });
 });
 
 require __DIR__.'/auth.php';
