@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\Animal;
+use App\Models\{Animal, Role};
 
 class User extends Authenticatable
 {
@@ -48,6 +48,9 @@ class User extends Authenticatable
         ];
     }
 
+    public function role() {
+        return $this->belongsTo(Role::class);
+    }
     public function animals() {
         return $this->hasMany(Animal::class);
     }
